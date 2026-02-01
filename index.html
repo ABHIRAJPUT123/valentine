@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mishri, Will You Be My Valentine?</title>
+
+<style>
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 50%, #ffa5c1 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 40px 30px;
+        border-radius: 25px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 28px;
+        margin: 0 0 20px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        font-size: 22px;
+        margin-top: 20px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 15px 0;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    button {
+        padding: 14px 32px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        margin: 12px;
+        transition: all 0.3s ease;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    #yesBtn {
+        background-color: #ffffff;
+        color: #ff4d6d;
+        box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+    }
+
+    #yesBtn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
+    }
+
+    #noBtn {
+        background-color: #ff4d6d;
+        color: white;
+    }
+
+    #noBtn:hover {
+        background-color: #ff2d4d;
+        transform: scale(1.05);
+    }
+
+    .hidden { display: none !important; }
+
+    .gallery {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .gallery img {
+        width: 140px;
+        height: 140px;
+        border-radius: 20px;
+        object-fit: cover;
+        border: 4px solid white;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+        transform: scale(1.08);
+    }
+
+    .hearts {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Fireworks canvas */
+    #fireworks {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+    }
+
+    .heart {
+        position: absolute;
+        animation: floatUp 5s linear infinite;
+        font-size: 24px;
+    }
+
+    @keyframes floatUp {
+        from {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 1;
+        }
+        to {
+            transform: translateY(-100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    .shake {
+        animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        10% { transform: translate(-2px, 2px) rotate(-1deg); }
+        20% { transform: translate(2px, -1px) rotate(1deg); }
+        30% { transform: translate(-1px, 2px) rotate(-1deg); }
+        40% { transform: translate(2px, 1px) rotate(1deg); }
+        50% { transform: translate(-2px, -1px) rotate(-1deg); }
+        60% { transform: translate(1px, 2px) rotate(1deg); }
+        70% { transform: translate(-1px, -2px) rotate(-1deg); }
+        80% { transform: translate(2px, 2px) rotate(1deg); }
+        90% { transform: translate(-2px, -2px) rotate(-1deg); }
+        100% { transform: translate(1px, -2px) rotate(0deg); }
+    }
+
+    #countdown {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 12px;
+        border-radius: 15px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Mobile responsiveness for Android */
+    @media (max-width: 768px) {
+        body {
+            min-height: 100vh;
+            min-height: 100dvh; /* for mobile browsers */
+        }
+
+        .container {
+            width: 95%;
+            max-width: 100%;
+            padding: 25px 20px;
+            margin: 20px auto;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 16px;
+            margin: 10px 5px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #noBtn {
+            position: fixed !important;
+        }
+
+        .gallery img {
+            width: 120px;
+            height: 120px;
+        }
+
+        #countdown {
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 20px 15px;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            margin: 8px 4px;
+        }
+
+        .gallery {
+            gap: 10px;
+        }
+
+        .gallery img {
+            width: 100px;
+            height: 100px;
+            border: 3px solid white;
+        }
+
+        #countdown {
+            font-size: 12px;
+            padding: 8px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- Background Music - Khaab by Akhil (Local) -->
+<audio id="bgMusic" loop autoplay muted>
+    <source src="khaab.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container" id="questionBox">
+    <h1>Mishri 🍭, will you be Boondi ka Laddu's Valentine? 💖</h1>
+    <button id="yesBtn">YES 🥰</button>
+    <button id="noBtn">NO 😜</button>
+    <div id="countdown"></div>
+</div>
+
+<div class="container hidden" id="loveBox">
+    <h1 id="typingText"></h1>
+
+    <p>
+        Mishri, tum meri life ki sweetness ho 🍯  
+        Tumhare bina sab pheeka lagta hai 😌  
+        Hamesha mere saath rehna ❤️  
+    </p>
+
+    <div class="gallery">
+        <!-- Your local photos -->
+        <img src="photo1.jpg" alt="Beautiful moment" />
+        <img src="photo2.jpg" alt="Sweet memory" />
+    </div>
+
+    <h2>Forever Yours, Boondi ka Laddu 🍬💘</h2>
+</div>
+
+<div class="hearts" id="hearts"></div>
+<canvas id="fireworks"></canvas>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const questionBox = document.getElementById("questionBox");
+const loveBox = document.getElementById("loveBox");
+const hearts = document.getElementById("hearts");
+const typingText = document.getElementById("typingText");
+const music = document.getElementById("bgMusic");
+
+// Unmute and play music automatically
+function startMusic() {
+    music.muted = false;
+    music.play().catch(() => {
+        console.log("Autoplay failed");
+    });
+}
+
+// Try to unmute on page load
+window.addEventListener("load", () => {
+    startMusic();
+});
+
+// Also unmute on first user interaction
+document.addEventListener("click", startMusic, { once: true });
+document.addEventListener("touchstart", startMusic, { once: true });
+
+// Function to move NO button away
+function moveNoButton() {
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noBtn.style.position = "fixed";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+    document.body.classList.add("shake");
+    setTimeout(() => document.body.classList.remove("shake"), 400);
+    if (navigator.vibrate) navigator.vibrate(100);
+}
+
+// NO button bhagega on desktop (mouseover)
+noBtn.addEventListener("mouseover", moveNoButton);
+
+// NO button bhagega on mobile (touch)
+noBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    moveNoButton();
+});
+
+// NO button also escapes on click for mobile
+noBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    moveNoButton();
+});
+
+// YES button click
+yesBtn.addEventListener("click", () => {
+    questionBox.classList.add("hidden");
+    loveBox.classList.remove("hidden");
+    startHearts();
+    startTyping();
+    startFireworks();
+});
+
+// Hearts animation
+function startHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 15 + "px";
+        hearts.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }, 300);
+}
+
+// Typing animation
+const message = "Yayyy Mishri said YES! 🥹💞";
+let i = 0;
+function startTyping() {
+    const interval = setInterval(() => {
+        typingText.textContent += message[i];
+        i++;
+        if (i >= message.length) clearInterval(interval);
+    }, 60);
+}
+
+// Countdown to Valentine
+const countdown = document.getElementById("countdown");
+const valentineDate = new Date("Feb 14, 2026 00:00:00").getTime();
+
+setInterval(() => {
+    const now = new Date().getTime();
+    const gap = valentineDate - now;
+
+    const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+    const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((gap % (1000 * 60)) / 1000);
+
+    countdown.innerHTML = `Countdown to our Valentine: ${d}d ${h}h ${m}m ${s}s 💘`;
+}, 1000);
+
+// Fireworks implementation
+(function(){
+    const canvas = document.getElementById('fireworks');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let DPR = window.devicePixelRatio || 1;
+    function resize() {
+        DPR = window.devicePixelRatio || 1;
+        canvas.width = Math.floor(window.innerWidth * DPR);
+        canvas.height = Math.floor(window.innerHeight * DPR);
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const rockets = [];
+    const particles = [];
+
+    function rand(min,max){ return Math.random()*(max-min)+min }
+
+    function Rocket(x,y,tx,ty){
+        this.x = x; this.y = y; this.tx = tx; this.ty = ty;
+        const dx = tx-x, dy = ty-y; const dist = Math.sqrt(dx*dx+dy*dy);
+        this.vx = dx/dist * rand(6,10);
+        this.vy = dy/dist * rand(6,10);
+        this.age = 0; this.exploded=false; this.color = `hsl(${Math.floor(rand(0,360))},80%,60%)`;
+    }
+    Rocket.prototype.update = function(dt){
+        this.x += this.vx * dt; this.y += this.vy * dt; this.vy += 0.02; this.age += dt;
+        const dx = this.tx - this.x, dy = this.ty - this.y;
+        if (!this.exploded && Math.hypot(dx,dy) < 20) {
+            this.exploded = true; explode(this.x,this.y,this.color);
+        }
+    }
+
+    function explode(x,y,color){
+        const count = Math.floor(rand(30,60));
+        for(let i=0;i<count;i++){
+            const a = rand(0,Math.PI*2);
+            const s = rand(1,6);
+            particles.push({x,y,vx:Math.cos(a)*s, vy:Math.sin(a)*s, life: rand(50,120), age:0, color});
+        }
+    }
+
+    function update() {
+        // dt normalized
+        // spawn rockets occasionally when active
+        for(let i=rockets.length-1;i>=0;i--){
+            rockets[i].update(1);
+            if (rockets[i].exploded) rockets.splice(i,1);
+        }
+        for(let i=particles.length-1;i>=0;i--){
+            const p = particles[i];
+            p.vy += 0.02; p.vx *= 0.997; p.vy *= 0.997; p.x += p.vx; p.y += p.vy; p.age++;
+            if (p.age > p.life) particles.splice(i,1);
+        }
+    }
+
+    function draw(){
+        ctx.clearRect(0,0,canvas.width/DPR,canvas.height/DPR);
+        // draw sparks
+        particles.forEach(p=>{
+            ctx.beginPath(); ctx.fillStyle = p.color; ctx.globalAlpha = Math.max(0,1 - p.age/p.life);
+            ctx.arc(p.x, p.y, 2.2, 0, Math.PI*2); ctx.fill();
+        });
+        // draw rockets
+        rockets.forEach(r=>{
+            ctx.beginPath(); ctx.fillStyle = r.color; ctx.globalAlpha = 1; ctx.arc(r.x, r.y, 3, 0, Math.PI*2); ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+    }
+
+    let running = false;
+    let rafId = null;
+    function loop(){ update(); draw(); if (running) rafId = requestAnimationFrame(loop); }
+
+    // Public starter: launch several rockets toward random targets
+    window.startFireworks = function(){
+        if (running) return; running = true;
+        const w = window.innerWidth, h = window.innerHeight;
+        // schedule bursts
+        const burstCount = 12;
+        for(let b=0;b<burstCount;b++){
+            setTimeout(()=>{
+                const sx = rand(w*0.1, w*0.9);
+                const tx = rand(w*0.2, w*0.8);
+                const ty = rand(h*0.1, h*0.5);
+                rockets.push(new Rocket(sx, h + 10, tx, ty));
+            }, b*300);
+        }
+        // keep loop running for a while and then stop
+        loop();
+        setTimeout(()=>{ running = false; if (rafId) cancelAnimationFrame(rafId); }, 7000);
+    };
+
+})();
+
+</script>
+
+</body>
+</html>
